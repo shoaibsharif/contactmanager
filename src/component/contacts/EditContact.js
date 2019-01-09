@@ -3,7 +3,7 @@ import { Consumer } from '../../context';
 import TextInputGroup from '../layout/TextInputGroup';
 import Axios from 'axios';
 
-class AddContact extends Component {
+class EditContact extends Component {
   state = {
     name: '',
     email: '',
@@ -11,6 +11,13 @@ class AddContact extends Component {
     errors: {}
   };
 
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    const res = await Axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+
+    let { name, email, phone } = res.data;
+    this.setState({ name, email, phone });
+  }
   onChange = e => this.setState({ [e.target.name]: e.target.value });
   onSubmit = async (dispatch, e) => {
     e.preventDefault();
@@ -21,16 +28,7 @@ class AddContact extends Component {
     phone.length === 0 ? (errors['phone'] = 'Phone Number is required') : delete errors.phone;
     this.setState({ errors });
 
-    const newContact = {
-      name,
-      email,
-      phone
-    };
-
     if (Object.keys(this.state.errors).length === 0) {
-      const res = await Axios.post('https://jsonplaceholder.typicode.com/users', newContact);
-      dispatch({ type: 'ADD_CONTACT', payload: res.data });
-
       //Clear State
       this.setState({ name: '', email: '', phone: '', errors: {} });
       this.props.history.push('/');
@@ -46,13 +44,13 @@ class AddContact extends Component {
           const { dispatch } = value;
           return (
             <div className='card mb-3'>
-              <div className='card-header'>Add Contact</div>
+              <div className='card-header'>Edit Contact</div>
               <div className='card-body'>
                 <form onSubmit={this.onSubmit.bind(this, dispatch)}>
                   <TextInputGroup
                     label='Name'
                     name='name'
-                    placeholder='Enter Your name'
+                    placeholder='Edit Your name'
                     value={name}
                     onChange={this.onChange}
                     error={errors.name}
@@ -61,7 +59,7 @@ class AddContact extends Component {
                     label='Email'
                     type='email'
                     name='email'
-                    placeholder='Enter Your email'
+                    placeholder='Edit Your email'
                     value={email}
                     onChange={this.onChange}
                     error={errors.email}
@@ -69,13 +67,13 @@ class AddContact extends Component {
                   <TextInputGroup
                     label='Phone'
                     name='phone'
-                    placeholder='Enter Your Phone Number'
+                    placeholder='Edit Your Phone Number'
                     value={phone}
                     onChange={this.onChange}
                     error={errors.phone}
                   />
 
-                  <button className='btn btn-success btn-block'>Add Contact</button>
+                  <button className='btn btn-success btn-block'>Edit Contact</button>
                 </form>
               </div>
             </div>
@@ -85,4 +83,4 @@ class AddContact extends Component {
     );
   }
 }
-export default AddContact;
+export default EditContact;
