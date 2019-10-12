@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 const TextInputGroup = ({ label, name, value, placeholder, type, onChange, error }) => {
   return (
-    <div className="form-group">
+    <div className='form-group'>
       <label htmlFor={name}>{label}</label>
       <input
         type={type}
@@ -16,19 +16,9 @@ const TextInputGroup = ({ label, name, value, placeholder, type, onChange, error
         value={value}
         onChange={onChange}
       />
-      {error && <div className="invalid-feedback"> {error} </div>}
+      {error && <div className='invalid-feedback'> {error} </div>}
     </div>
   );
-};
-
-TextInputGroup.PropTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  error: PropTypes.string.isRequired
 };
 
 TextInputGroup.defaultProps = {
